@@ -10,6 +10,9 @@ const liri = (function() {
     let query = process.argv[3];
 
     let logicTree = function(cmd, query) {
+        
+        _log("request",cmd, query);
+
         switch (cmd) {
             case ("my-tweets"):
                 _twitter(query);
@@ -28,7 +31,6 @@ const liri = (function() {
     };
 
     let _twitter = function(query) {
-
         let twitter = new Twitter(keys.twitterKeys);
 
         twitter.get("https://api.twitter.com/1.1/statuses/home_timeline.json", function(err, tweetsArr, response) {
@@ -40,7 +42,7 @@ const liri = (function() {
             for (let i = 0; i < tweetsArr.length; i++) {
                 let tweet = tweetsArr[i].text;
                 let crDate = tweetsArr[i].created_at;
-               
+
                 console.log("On " + crDate + " " + userName + " tweeted: " + tweet);
             }
         })
@@ -110,7 +112,6 @@ const liri = (function() {
 
     let _rand = function(query) {
         fs.readFile("random.txt", function(err, data) {
-
             if (err) {
                 return console.error(err);
             }
@@ -124,7 +125,19 @@ const liri = (function() {
         })
     }
 
+    let _log = function(type, cmd, query, data) {
+
+        if (type === "request") {
+            let log = fs.createWriteStream("log.txt", {"flags":"a"});
+            log.write("User request: " + cmd + " " + query + "/n");
+            console.log("data appended");
+        } else if (type === "result") {
+
+        }
+    }
+
     // console.log(keys.twitterKeys)
 
     logicTree(cmd, query);
+    // _log();
 })();
