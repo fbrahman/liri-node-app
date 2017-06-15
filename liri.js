@@ -12,7 +12,7 @@ const liri = (function() {
     let logicTree = function(cmd, query) {
         switch (cmd) {
             case ("my-tweets"):
-                console.log("tweets");
+                _twitter(query);
                 break;
             case ("spotify-this-song"):
                 _spotify(query);
@@ -27,75 +27,85 @@ const liri = (function() {
 
     };
 
-    let spotify = new Spotify({
-        id: "35203e78173846e6978ed40ac28de587",
-        secret: "54cd0ad8674a4998a227d78cb21e01fa"
-    });
 
-    let _spotify = function(query){
+    let _twitter = function(query) {
 
-    	query = query?query:"The Sign";
+        let twitter = new Twitter(keys.twitterKeys);
 
-    	spotify.search({ type: 'track', query: '"'+query+'"', limit: 1 }, function(err, data) {
-    	    if (err) {
-    	        return console.log('Error occurred: ' + err);
-    	    }
+        twitter.get("https://api.twitter.com/1.1/statuses/home_timeline.json", function(err, tweetsArr, response) {
+            if (err) throw err;
 
-    	    let tracks = data.tracks.items;
+            for (let i = 0; i < tweetsArr.length; i++) {
+                console.log(i, tweetsArr[i].text)
+            }
+        })
+    }
 
-    	    for (var i = 0; i < tracks.length ; i++) {
-    	    	let artists = tracks[i].artists[0].name;
-    	    	let songTitle = tracks[i].name;
-    	    	let preview = tracks[i].preview_url;
-    	    	let album = tracks[i].album.name;
 
-    	    	console.log(artists, songTitle, preview, album);
-    	    }
+    let _spotify = function(query) {
 
-    	});
+        let spotify = new Spotify(keys.spotifyKeys);
+
+        query = query ? query : "The Sign";
+
+        spotify.search({ type: 'track', query: '"' + query + '"', limit: 1 }, function(err, data) {
+            if (err) {
+                return console.log('Error occurred: ' + err);
+            }
+
+            let tracks = data.tracks.items;
+
+            for (let i = 0; i < tracks.length; i++) {
+                let artists = tracks[i].artists[0].name;
+                let songTitle = tracks[i].name;
+                let preview = tracks[i].preview_url;
+                let album = tracks[i].album.name;
+
+                console.log(artists, songTitle, preview, album);
+            }
+
+        });
     };
 
-    let _movie = function (query){
-    	
-    	query = query?query:"Mr. Nobody";
+    let _movie = function(query) {
 
-    	request("http://www.omdbapi.com/?t="+ query +"&y=&plot=short&apikey=40e9cece", function (err, res, body){	
-    		if (err) {
-    		    return console.log('Error occurred: ' + res.statusCode);
-    		}
+        query = query ? query : "Mr. Nobody";
 
-    		let movie = JSON.parse(body);
-    		let title = movie.Title;
-    		let year = movie.Year;
-    		let imdb = movie.imdbRating;
-    		let country = movie.Country;
-    		let language = movie.Language;
-    		let plot = movie.Plot;
-    		let actors = movie.Actors
+        request("http://www.omdbapi.com/?t=" + query + "&y=&plot=short&apikey=40e9cece", function(err, res, body) {
+            if (err) {
+                return console.log('Error occurred: ' + res.statusCode);
+            }
 
-    		console.log(title, year, imdb, country, language, plot, actors);
-    	})
-     }
+            let movie = JSON.parse(body);
+            let title = movie.Title;
+            let year = movie.Year;
+            let imdb = movie.imdbRating;
+            let country = movie.Country;
+            let language = movie.Language;
+            let plot = movie.Plot;
+            let actors = movie.Actors
 
-     let _rand = function (query){
-     	fs.readFile("random.txt", function(err, data){
+            console.log(title, year, imdb, country, language, plot, actors);
+        })
+    }
 
-     		if(err){
-     			return console.error(err);
-     		}
+    let _rand = function(query) {
+        fs.readFile("random.txt", function(err, data) {
 
-     		let text = data.toString();
-     		let comma = text.indexOf(',');
-     		let cmd = text.slice(0, comma);
-     		let q = text.slice(comma+1, text.length);
+            if (err) {
+                return console.error(err);
+            }
 
-     		logicTree(cmd,q);
-     	})
-     }
+            let text = data.toString();
+            let comma = text.indexOf(',');
+            let cmd = text.slice(0, comma);
+            let q = text.slice(comma + 1, text.length);
 
-     console.log(keys)
+            logicTree(cmd, q);
+        })
+    }
 
-    logicTree(cmd,query);
+    // console.log(keys.twitterKeys)
+
+    logicTree(cmd, query);
 })();
-
-
