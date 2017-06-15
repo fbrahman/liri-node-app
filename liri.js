@@ -27,7 +27,6 @@ const liri = (function() {
 
     };
 
-
     let _twitter = function(query) {
 
         let twitter = new Twitter(keys.twitterKeys);
@@ -35,8 +34,14 @@ const liri = (function() {
         twitter.get("https://api.twitter.com/1.1/statuses/home_timeline.json", function(err, tweetsArr, response) {
             if (err) throw err;
 
+            let userName = tweetsArr[0].user.name;
+
+            console.log("Here is the a list of the last 20 tweets from " + userName + "!");
             for (let i = 0; i < tweetsArr.length; i++) {
-                console.log(i, tweetsArr[i].text)
+                let tweet = tweetsArr[i].text;
+                let crDate = tweetsArr[i].created_at;
+               
+                console.log("On " + crDate + " " + userName + " tweeted: " + tweet);
             }
         })
     }
@@ -55,13 +60,19 @@ const liri = (function() {
 
             let tracks = data.tracks.items;
 
+            console.log("Here is the information for the requested song:")
+
             for (let i = 0; i < tracks.length; i++) {
                 let artists = tracks[i].artists[0].name;
                 let songTitle = tracks[i].name;
-                let preview = tracks[i].preview_url;
+                let preview = tracks[i].preview_url || "no preview available";
                 let album = tracks[i].album.name;
 
-                console.log(artists, songTitle, preview, album);
+                console.log("Artist: ", artists);
+                console.log("Song Title: ", songTitle);
+                console.log("Album: ", album);
+                console.log("Song preview link: ", preview);
+                // console.log(artists, songTitle, preview, album);
             }
 
         });
@@ -85,7 +96,15 @@ const liri = (function() {
             let plot = movie.Plot;
             let actors = movie.Actors
 
-            console.log(title, year, imdb, country, language, plot, actors);
+            console.log("Here is the information for the requested movie:")
+            console.log("Title: ", title);
+            console.log("Release Year:", year);
+            console.log("Plot: ", plot);
+            console.log("Actors: ", actors);
+            console.log("Country of Origin: ", country);
+            console.log("Language: ", language);
+            console.log("IMDB rating: ", imdb);
+            // console.log(title, year, imdb, country, language, plot, actors);
         })
     }
 
