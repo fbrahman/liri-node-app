@@ -57,7 +57,6 @@ const liri = (function() {
 
 
     let _spotify = function(query) {
-
         let spotify = new Spotify(keys.spotifyKeys);
 
         query = query ? query : "The Sign";
@@ -133,6 +132,7 @@ const liri = (function() {
     }
 
     let _rand = function(query) {
+
         fs.readFile("random.txt", function(err, data) {
             if (err) {
                 return console.error(err);
@@ -148,7 +148,6 @@ const liri = (function() {
     }
 
     let _log = function(type) {
-
         let log = fs.createWriteStream("log.txt", { "flags": "a" });
 
         if (type === "request") {
