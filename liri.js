@@ -7,10 +7,10 @@ const liri = (function() {
     const fs = require("fs");
     const inquirer = require("inquirer");
 
-    let cmd = process.argv[2];
-    let query = process.argv[3];
+    // let cmd = process.argv[2];
+    // let query = process.argv[3];
 
-    let _cmdSelection = function (){
+    let _inquirerCMDSelection = function (){
         inquirer.prompt([
             {
                 type:"list", 
@@ -19,46 +19,71 @@ const liri = (function() {
                 choices:["View my Tweets.", "Spotify a song.", "Look up a movie.", "Random!", "Other Actions."]
             }
         ]).then(function (userSelection){
-            switch(userSelection.cmd){
-                case("View my Tweets."):
-                    _logicTree("my-tweets");
-                    break;
-                case("Spotify a song."):
-                    inquirer.prompt([
-                        {
-                            type: "input",
-                            name: "songName",
-                            message: "Please enter the name of the song you would like to look up?"
-                        }
-                    ]).then(function(userInput){
-                        let query = userInput.songName;
-                        _logicTree("spotify-this-song", query);
-                    })
-                    break;
-                case("Look up a movie."):
-                    inquirer.prompt([
-                        {
-                            type: "input",
-                            name: "movieName",
-                            message: "Please enter the name of the movie you would like to look up?"
-                        }
-                    ]).then(function(userInput){
-                        let query = userInput.movieName;
-                        _logicTree("movie-this", query);
-                    })
-                    break;
-                case("Random!"):
-                    _logicTree("do-what-it-says");
-                    break;
-                case("Other Actions."):
-                    _readFile();
-                    break;
-           
-            }
+            _inquirerCMDLogicTree(userSelection);
         })
     };
 
-    _cmdSelection();
+    let _inquirerCMDLogicTree = function (userSelection){
+        switch(userSelection.cmd){
+            case("View my Tweets."):
+                _logicTree("my-tweets");
+                break;
+            case("Spotify a song."):
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        name: "songName",
+                        message: "Please enter the name of the song you would like to look up?"
+                    }
+                ]).then(function(userInput){
+                    let query = userInput.songName;
+                    _logicTree("spotify-this-song", query);
+                })
+                break;
+            case("Look up a movie."):
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        name: "movieName",
+                        message: "Please enter the name of the movie you would like to look up?"
+                    }
+                ]).then(function(userInput){
+                    let query = userInput.movieName;
+                    _logicTree("movie-this", query);
+                })
+                break;
+            case("Random!"):
+                _logicTree("do-what-it-says");
+                break;
+            case("Other Actions."):
+                inquirer.prompt([
+                    {
+                        type: "list",
+                        name: "otherOptions",
+                        message:"What would you like to do?",
+                        choices:["View Random.txt", "View Log.txt", "Return"]
+                    }
+                ]).then(function(userSelection){
+                    _inquirerOtherOptionsLogicTree(userSelection);
+                })
+                break;
+        
+        }
+    };
+
+    let _inquirerOtherOptionsLogicTree = function (userSelection){
+        switch(userSelection.otherOptions){
+            case("View Random.txt"):
+                _readFile("random.txt");
+                break;
+            case("View Log.txt"):
+                _readFile("log.txt")
+                break;
+            case("Return"):
+                _inquirerCMDSelection();
+                break;
+        }
+    };
 
     let _logicTree = function(cmd, query) {
 
@@ -82,14 +107,13 @@ const liri = (function() {
 
     let _twitter = function(query) {
         let tweets = new Twitter(keys.twitterKeys);
-        let queryURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-        let testURL = "/statuses/user_timeline"
+        let queryURL = "/statuses/user_timeline"
         let params = {
             screen_name:"UCSD_TeamName", 
             count: 20
         }
 
-        tweets.get(testURL,params, function(err, tweetsArr, response) {
+        tweets.get(queryURL,params, function(err, tweetsArr, response) {
             if (err) throw err;
             // console.log("tweetArr: ",tweetsArr);
             // console.log("Response: ",JSON.stringify(response,null,2));
@@ -113,7 +137,7 @@ const liri = (function() {
 
             _log("result", resultsArray);
         })
-    }
+    };
 
 
     let _spotify = function(query) {
@@ -189,7 +213,7 @@ const liri = (function() {
 
             _log("result", resultsArray);
         })
-    }
+    };
 
     let _rand = function(query) {
 
@@ -212,14 +236,8 @@ const liri = (function() {
                     _logicTree(cmd);
                 }
             }
-
-            // let comma = text.indexOf(',');
-            // let cmd = text.slice(0, comma);
-            // let q = text.slice(comma + 1, text.length);
-            // console.log(cmd, q);
-            // _logicTree(cmd, q);
         })
-    }
+    };
 
     let _log = function(type) {
         let log = fs.createWriteStream("log.txt", { "flags": "a" });
@@ -238,18 +256,18 @@ const liri = (function() {
             };
             log.end("\n")
         }
-    }
+    };
 
     let _readFile = function(fileName){
-        fs.readFile("log.txt", "utf8", function(err, data){
+        fs.readFile(fileName, "utf8", function(err, data){
             if (err){
                 return console.log(err);
             }
 
             console.log(data);
         })
-    }
+    };
 
-    // _logicTree(cmd, query);
+    _inquirerCMDSelection();
 
 })();
