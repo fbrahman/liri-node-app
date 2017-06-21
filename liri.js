@@ -45,7 +45,7 @@ const liri = (function() {
             for (let i = 0; i < tweetsArr.length; i++) {
                 let tweet = tweetsArr[i].text;
                 let crDate = tweetsArr[i].created_at;
-                let tweetStr = ("On " + crDate + " " + userName + " tweeted: " + tweet); 
+                let tweetStr = ("On " + crDate + " " + userName + " tweeted: " + tweet);
 
                 console.log(tweetStr);
                 resultsArray.push(tweetStr);
@@ -77,7 +77,7 @@ const liri = (function() {
                 let preview = tracks[i].preview_url || "no preview available";
                 let album = tracks[i].album.name;
 
-                let artistStr =("Artist: " + artists);
+                let artistStr = ("Artist: " + artists);
                 let songStr = ("Song Title: " + songTitle);
                 let albumStr = ("Album: " + album);
                 let previewStr = ("Song preview link: " + preview);
@@ -85,7 +85,7 @@ const liri = (function() {
                 resultsArray.push(artistStr, songStr, albumStr, previewStr);
             }
 
-            for (let j = 0; j < resultsArray.length; j++){
+            for (let j = 0; j < resultsArray.length; j++) {
                 console.log(resultsArray[j])
             }
 
@@ -121,9 +121,9 @@ const liri = (function() {
             let languageStr = ("Language: " + language);
             let imdbStr = ("IMDB rating: " + imdb);
 
-            resultsArray.push(movieHdr, titleStr, yearStr, plotStr, actorStr, countryStr, languageStr,imdbStr);
-            
-            for (let j = 0; j < resultsArray.length; j++){
+            resultsArray.push(movieHdr, titleStr, yearStr, plotStr, actorStr, countryStr, languageStr, imdbStr);
+
+            for (let j = 0; j < resultsArray.length; j++) {
                 console.log(resultsArray[j])
             }
 
@@ -139,11 +139,25 @@ const liri = (function() {
             }
 
             let text = data.toString();
-            let comma = text.indexOf(',');
-            let cmd = text.slice(0, comma);
-            let q = text.slice(comma + 1, text.length);
+            let queries = text.split("\r\n");
 
-            _logicTree(cmd, q);
+            for (let i = 0; i < queries.length; i++) {
+                let comma = queries[i].indexOf(',');
+                if (comma != -1) {
+                    let cmd = queries[i].slice(0, comma);
+                    let q = queries[i].slice(comma + 1, text.length);
+                    _logicTree(cmd, q);
+                } else if (comma === -1) {
+                    let cmd = queries[i];
+                    _logicTree(cmd);
+                }
+            }
+
+            // let comma = text.indexOf(',');
+            // let cmd = text.slice(0, comma);
+            // let q = text.slice(comma + 1, text.length);
+            // console.log(cmd, q);
+            // _logicTree(cmd, q);
         })
     }
 
@@ -152,17 +166,16 @@ const liri = (function() {
 
         if (type === "request") {
             let cmd = arguments[1];
-            let query = arguments[2]||"default option"
-            
+            let query = arguments[2] || "default option"
+
             log.write("User request: " + cmd + " " + query + "\n");
 
         } else if (type === "result") {
             let resultsArray = arguments[1];
 
-            for(let i = 0; i < resultsArray.length; i++){
-                log.write(resultsArray[i]+"\n");
+            for (let i = 0; i < resultsArray.length; i++) {
+                log.write(resultsArray[i] + "\n");
             };
-
             log.end("\n")
         }
     }
