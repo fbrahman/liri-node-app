@@ -5,9 +5,60 @@ const liri = (function() {
     const Spotify = require("node-spotify-api");
     const request = require("request");
     const fs = require("fs");
+    const inquirer = require("inquirer");
 
     let cmd = process.argv[2];
     let query = process.argv[3];
+
+    let _cmdSelection = function (){
+        inquirer.prompt([
+            {
+                type:"list", 
+                name:"cmd", 
+                message:"What would you like to do?", 
+                choices:["View my Tweets.", "Spotify a song.", "Look up a movie.", "Random!", "Other Actions."]
+            }
+        ]).then(function (userSelection){
+            switch(userSelection.cmd){
+                case("View my Tweets."):
+                    _logicTree("my-tweets");
+                    break;
+                case("Spotify a song."):
+                    inquirer.prompt([
+                        {
+                            type: "input",
+                            name: "songName",
+                            message: "Please enter the name of the song you would like to look up?"
+                        }
+                    ]).then(function(userInput){
+                        let query = userInput.songName;
+                        _logicTree("spotify-this-song", query);
+                    })
+                    break;
+                case("Look up a movie."):
+                    inquirer.prompt([
+                        {
+                            type: "input",
+                            name: "movieName",
+                            message: "Please enter the name of the movie you would like to look up?"
+                        }
+                    ]).then(function(userInput){
+                        let query = userInput.movieName;
+                        _logicTree("movie-this", query);
+                    })
+                    break;
+                case("Random!"):
+                    _logicTree("do-what-it-says");
+                    break;
+                case("Other Actions."):
+                    _readFile();
+                    break;
+           
+            }
+        })
+    };
+
+    _cmdSelection();
 
     let _logicTree = function(cmd, query) {
 
@@ -30,10 +81,19 @@ const liri = (function() {
     };
 
     let _twitter = function(query) {
-        let twitter = new Twitter(keys.twitterKeys);
+        let tweets = new Twitter(keys.twitterKeys);
+        let queryURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+        let testURL = "/statuses/user_timeline"
+        let params = {
+            screen_name:"UCSD_TeamName", 
+            count: 20
+        }
 
-        twitter.get("https://api.twitter.com/1.1/statuses/home_timeline.json", function(err, tweetsArr, response) {
+        tweets.get(testURL,params, function(err, tweetsArr, response) {
             if (err) throw err;
+            // console.log("tweetArr: ",tweetsArr);
+            // console.log("Response: ",JSON.stringify(response,null,2));
+            // console.log("Raw Responses: ", response);
 
             let userName = tweetsArr[0].user.name;
             let resultsArray = [];
@@ -167,6 +227,16 @@ const liri = (function() {
         }
     }
 
-    _logicTree(cmd, query);
+    let _readFile = function(fileName){
+        fs.readFile("random.txt", "utf8", function(err, data){
+            if (err){
+                return console.log(err);
+            }
+
+            console.log(data);
+        })
+    }
+
+    // _logicTree(cmd, query);
 
 })();
