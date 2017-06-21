@@ -241,7 +241,7 @@ const liri = (function() {
     }
 
     let _readFile = function(fileName){
-        fs.readFile("random.txt", "utf8", function(err, data){
+        fs.readFile("log.txt", "utf8", function(err, data){
             if (err){
                 return console.log(err);
             }
