@@ -16,7 +16,7 @@ const liri = (function() {
                 type:"list", 
                 name:"cmd", 
                 message:"What would you like to do?", 
-                choices:["View my Tweets.", "Spotify a song.", "Look up a movie.", "Random!", "Other Actions."]
+                choices:["View my Tweets.", "Spotify a song.", "Look up a movie.", "Random!", "View files."]
             }
         ]).then(function (userSelection){
             _inquirerCMDLogicTree(userSelection);
@@ -55,12 +55,12 @@ const liri = (function() {
             case("Random!"):
                 _logicTree("do-what-it-says");
                 break;
-            case("Other Actions."):
+            case("View files."):
                 inquirer.prompt([
                     {
                         type: "list",
                         name: "otherOptions",
-                        message:"What would you like to do?",
+                        message:"Please choose a file to view:",
                         choices:["View Random.txt", "View Log.txt", "Return"]
                     }
                 ]).then(function(userSelection){
@@ -84,6 +84,29 @@ const liri = (function() {
                 break;
         }
     };
+
+    let _inquirerRestartSelection = function (){
+        inquirer.prompt([
+            {
+                type: "confirm",
+                name: "confirmRestart",
+                message: "Would you like to return to the main menu?"
+
+            }
+        ]).then(function(userSelection){
+                _inquirerRestartLogicTree(userSelection);
+        })
+    };
+
+    let _inquirerRestartLogicTree = function (userSelection){
+        if (userSelection.confirmRestart){
+            _inquirerCMDSelection();
+        } else{
+            console.log("Exiting program...");
+            return;
+        }
+    };
+
 
     let _logicTree = function(cmd, query) {
 
@@ -263,8 +286,11 @@ const liri = (function() {
             if (err){
                 return console.log(err);
             }
-
+            console.log("-------------------------------");
+            console.log("Showing contents of "+fileName);
+            console.log("-------------------------------");
             console.log(data);
+            _inquirerRestartSelection();
         })
     };
 

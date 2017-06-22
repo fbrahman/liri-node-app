@@ -1,47 +1,7 @@
-User request: movie-this default option
-Here is the information for the requested movie:
-Title: Mr. Nobody
-Release Year:2009
-Plot: A boy stands on a station platform as a train is about to leave. Should he go with his mother or stay with his father? Infinite possibilities arise from this decision. As long as he doesn't choose, anything is possible.
-Actors: Jared Leto, Sarah Polley, Diane Kruger, Linh Dan Pham
-Country of Origin: Belgium, Germany, Canada, France, USA, UK
-Language: English, Mohawk
-IMDB rating: 7.9
-
 User request: my-tweets default option
 Here is the a list of the last 20 tweets from Team Name!
 On Thu Jun 15 17:52:26 +0000 2017 Team Name tweeted: Two Tweets in one day! Stop the craziness!
 On Thu Jun 15 16:09:33 +0000 2017 Team Name tweeted: Hello Twitter! #myfirstTweet
-
-User request: do-what-it-says default option
-User request: spotify-this-song "I Want it That Way"
-User request: my-tweets default option
-User request: movie-this "Mrs. Doubtfire"
-Here is the information for the requested movie:
-Title: Mrs. Doubtfire
-Release Year:1993
-Plot: After a bitter divorce, an actor disguises himself as a female housekeeper to spend time with his children held in custody by his former wife.
-Actors: Robin Williams, Sally Field, Pierce Brosnan, Harvey Fierstein
-Country of Origin: USA
-Language: English
-IMDB rating: 6.9
-
-Here is the a list of the last 20 tweets from Team Name!
-On Thu Jun 15 17:52:26 +0000 2017 Team Name tweeted: Two Tweets in one day! Stop the craziness!
-On Thu Jun 15 16:09:33 +0000 2017 Team Name tweeted: Hello Twitter! #myfirstTweet
-
-Here is the information for the requested song:
-Artist: Backstreet Boys
-Song Title: I Want It That Way
-Album: The Hits--Chapter One
-Song preview link: https://p.scdn.co/mp3-preview/e72a05dc3f69c891e3390c3ceaa77fad02f6b5f6?cid=35203e78173846e6978ed40ac28de587
-
-User request: spotify-this-song default option
-Here is the information for the requested song:
-Artist: Ace of Base
-Song Title: The Sign
-Album: The Sign (US Album) [Remastered]
-Song preview link: https://p.scdn.co/mp3-preview/4c463359f67dd3546db7294d236dd0ae991882ff?cid=35203e78173846e6978ed40ac28de587
 
 User request: spotify-this-song default option
 Here is the information for the requested song:
@@ -72,9 +32,4 @@ Artist: Backstreet Boys
 Song Title: I Want It That Way
 Album: The Hits--Chapter One
 Song preview link: https://p.scdn.co/mp3-preview/e72a05dc3f69c891e3390c3ceaa77fad02f6b5f6?cid=35203e78173846e6978ed40ac28de587
-
-User request: my-tweets default option
-Here is the a list of the last 20 tweets from Team Name!
-On Thu Jun 15 17:52:26 +0000 2017 Team Name tweeted: Two Tweets in one day! Stop the craziness!
-On Thu Jun 15 16:09:33 +0000 2017 Team Name tweeted: Hello Twitter! #myfirstTweet
 
