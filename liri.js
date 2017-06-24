@@ -246,7 +246,7 @@ const liri = (function() {
             }
 
             let text = data.toString();
-            let queries = text.split("\r\n");
+            let queries = text.split(/\r?\n/);
 
             for (let i = 0; i < queries.length; i++) {
                 let comma = queries[i].indexOf(',');
